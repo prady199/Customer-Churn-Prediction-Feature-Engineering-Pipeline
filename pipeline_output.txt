@@ -1,0 +1,143 @@
+2026-07-13 06:52:56 | INFO     | src.preprocessing | Loaded dataset with shape (7043, 21)
+2026-07-13 06:52:56 | INFO     | src.preprocessing | Converted TotalCharges to numeric (errors coerced to NaN).
+2026-07-13 06:52:56 | INFO     | src.preprocessing | Filled 11 missing TotalCharges values with 0 (tenure=0 customers).
+2026-07-13 06:52:57 | INFO     | src.preprocessing | Removed 0 duplicate rows.
+2026-07-13 06:52:57 | INFO     | src.preprocessing | Cleaning complete. Final shape: (7043, 20)
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | Created new features: AvgMonthlySpend, NumServices, CustomerLifetimeCategory, AutoPaymentFlag, MonthlyChargeCategory, TenureGroup, PremiumCustomerFlag
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | Skewness of TotalCharges before transform: 0.963
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | TotalCharges is significantly skewed (0.963). Applied log1p transform -> new skewness: -0.824. Log transformation compresses the long right tail (high-spend customers), making the distribution closer to normal, which benefits distance-based and linear models (KNN, Logistic Regression, SVM).
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | Label-encoded binary columns: ['Partner', 'Dependents', 'PhoneService', 'PaperlessBilling', 'Churn', 'MultipleLines', 'gender']
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | One-hot encoded columns: ['Contract', 'InternetService', 'PaymentMethod', 'DeviceProtection', 'StreamingTV', 'StreamingMovies', 'OnlineBackup', 'OnlineSecurity', 'TechSupport']
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | Scaled MonthlyCharges (StandardScaler) and tenure/TotalCharges (MinMaxScaler).
+2026-07-13 06:52:57 | INFO     | src.feature_engineering | Feature engineering complete. Final shape: (7043, 54)
+2026-07-13 06:52:57 | INFO     | __main__ | Train shape: (5634, 53) | Test shape: (1409, 53)
+2026-07-13 06:52:57 | INFO     | src.train_model | Training Logistic Regression ...
+2026-07-13 06:52:57 | INFO     | src.train_model | Logistic Regression -> ROC AUC: 0.8468
+2026-07-13 06:52:57 | INFO     | src.train_model | Training Decision Tree ...
+2026-07-13 06:52:58 | INFO     | src.train_model | Decision Tree -> ROC AUC: 0.6596
+2026-07-13 06:52:58 | INFO     | src.train_model | Training Random Forest ...
+2026-07-13 06:52:59 | INFO     | src.train_model | Random Forest -> ROC AUC: 0.8215
+2026-07-13 06:52:59 | INFO     | src.train_model | Training KNN ...
+2026-07-13 06:53:00 | INFO     | src.train_model | KNN -> ROC AUC: 0.8221
+2026-07-13 06:53:00 | INFO     | src.train_model | Training SVM ...
+2026-07-13 06:53:08 | INFO     | src.train_model | SVM -> ROC AUC: 0.8252
+2026-07-13 06:53:08 | INFO     | src.train_model | Training Gradient Boosting ...
+2026-07-13 06:53:09 | INFO     | src.train_model | Gradient Boosting -> ROC AUC: 0.8427
+2026-07-13 06:53:09 | INFO     | src.train_model | Training XGBoost ...
+/usr/local/lib/python3.12/dist-packages/xgboost/training.py:200: UserWarning: [06:53:09] WARNING: /__w/xgboost/xgboost/src/learner.cc:793: 
+Parameters: { "use_label_encoder" } are not used.
+
+  bst.update(dtrain, iteration=i, fobj=obj)
+2026-07-13 06:53:09 | INFO     | src.train_model | XGBoost -> ROC AUC: 0.8195
+
+======================================================================
+STEP 6-7: MODEL COMPARISON TABLE
+======================================================================
+                     Accuracy  Precision  Recall  F1 Score  ROC AUC
+Logistic Regression    0.8084     0.6722  0.5428    0.6006   0.8468
+Gradient Boosting      0.8013     0.6621  0.5134    0.5783   0.8427
+SVM                    0.7771     0.7273  0.2567    0.3794   0.8252
+KNN                    0.7928     0.6235  0.5535    0.5864   0.8221
+Random Forest          0.7814     0.6071  0.5000    0.5484   0.8215
+XGBoost                0.7708     0.5785  0.5027    0.5379   0.8195
+Decision Tree          0.7239     0.4816  0.5241    0.5019   0.6596
+
+Best baseline model (by ROC AUC): Logistic Regression
+
+======================================================================
+STEP 8: HYPERPARAMETER TUNING (GridSearchCV)
+======================================================================
+2026-07-13 06:53:09 | INFO     | src.train_model | Starting GridSearchCV for RandomForestClassifier ...
+2026-07-13 06:54:33 | INFO     | src.train_model | Best params for RandomForestClassifier: {'max_depth': 8, 'min_samples_split': 5, 'n_estimators': 300} (CV roc_auc: 0.8444)
+2026-07-13 06:54:33 | INFO     | src.train_model | Starting GridSearchCV for DecisionTreeClassifier ...
+2026-07-13 06:54:38 | INFO     | src.train_model | Best params for DecisionTreeClassifier: {'criterion': 'entropy', 'max_depth': 4, 'min_samples_split': 2} (CV roc_auc: 0.8277)
+2026-07-13 06:54:38 | INFO     | src.train_model | Starting GridSearchCV for GradientBoostingClassifier ...
+2026-07-13 06:56:29 | INFO     | src.train_model | Best params for GradientBoostingClassifier: {'learning_rate': 0.05, 'max_depth': 2, 'n_estimators': 100} (CV roc_auc: 0.8481)
+2026-07-13 06:56:29 | INFO     | src.train_model | Training Random Forest (Tuned) ...
+2026-07-13 06:56:31 | INFO     | src.train_model | Random Forest (Tuned) -> ROC AUC: 0.8425
+2026-07-13 06:56:31 | INFO     | src.train_model | Training Decision Tree (Tuned) ...
+2026-07-13 06:56:31 | INFO     | src.train_model | Decision Tree (Tuned) -> ROC AUC: 0.8299
+2026-07-13 06:56:31 | INFO     | src.train_model | Training Gradient Boosting (Tuned) ...
+2026-07-13 06:56:32 | INFO     | src.train_model | Gradient Boosting (Tuned) -> ROC AUC: 0.8427
+
+Full comparison (baseline + tuned):
+                           Accuracy  Precision  Recall  F1 Score  ROC AUC
+Logistic Regression          0.8084     0.6722  0.5428    0.6006   0.8468
+Gradient Boosting (Tuned)    0.7977     0.6606  0.4893    0.5622   0.8427
+Gradient Boosting            0.8013     0.6621  0.5134    0.5783   0.8427
+Random Forest (Tuned)        0.8013     0.6632  0.5107    0.5770   0.8425
+Decision Tree (Tuned)        0.7921     0.6576  0.4519    0.5357   0.8299
+SVM                          0.7771     0.7273  0.2567    0.3794   0.8252
+KNN                          0.7928     0.6235  0.5535    0.5864   0.8221
+Random Forest                0.7814     0.6071  0.5000    0.5484   0.8215
+XGBoost                      0.7708     0.5785  0.5027    0.5379   0.8195
+Decision Tree                0.7239     0.4816  0.5241    0.5019   0.6596
+
+*** OVERALL BEST MODEL: Logistic Regression ***
+Accuracy     0.8084
+Precision    0.6722
+Recall       0.5428
+F1 Score     0.6006
+ROC AUC      0.8468
+Name: Logistic Regression, dtype: float64
+
+======================================================================
+STEP 9: MODEL EVALUATION
+======================================================================
+2026-07-13 06:56:32 | INFO     | src.evaluation | Saved confusion matrix to /home/claude/Customer_Churn_Project/outputs/plots/confusion_matrix.png
+              precision    recall  f1-score   support
+
+    No Churn       0.85      0.90      0.87      1035
+       Churn       0.67      0.54      0.60       374
+
+    accuracy                           0.81      1409
+   macro avg       0.76      0.72      0.74      1409
+weighted avg       0.80      0.81      0.80      1409
+
+2026-07-13 06:56:32 | INFO     | src.evaluation | Saved ROC curve to /home/claude/Customer_Churn_Project/outputs/plots/roc_curve.png
+2026-07-13 06:56:32 | INFO     | src.evaluation | Saved precision-recall curve to /home/claude/Customer_Churn_Project/outputs/plots/precision_recall_curve.png
+2026-07-13 06:56:38 | INFO     | src.evaluation | Saved learning curve to /home/claude/Customer_Churn_Project/outputs/plots/learning_curve.png
+2026-07-13 06:56:40 | INFO     | src.evaluation | Cross-val roc_auc scores: [0.8673, 0.8621, 0.8529, 0.8427, 0.8237] | Mean: 0.8497
+5-Fold CV ROC AUC scores: [0.8673 0.8621 0.8529 0.8427 0.8237] | Mean: 0.8497
+
+======================================================================
+STEP 10: FEATURE IMPORTANCE
+======================================================================
+2026-07-13 06:56:40 | WARNING  | src.evaluation | LogisticRegression has no feature_importances_ attribute.
+2026-07-13 06:56:40 | INFO     | __main__ | Best model has no feature_importances_; using Random Forest (Tuned) for importance chart.
+/home/claude/Customer_Churn_Project/src/evaluation.py:151: FutureWarning: 
+
+Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
+
+  sns.barplot(data=imp_df, x="Importance", y="Feature", ax=ax, palette="viridis")
+2026-07-13 06:56:40 | INFO     | src.evaluation | Saved feature importance chart to /home/claude/Customer_Churn_Project/outputs/plots/feature_importance.png
+                       Feature  Importance
+       Contract_Month-to-month    0.098609
+                        tenure    0.091124
+                  TotalCharges    0.066789
+              TotalCharges_log    0.066284
+                MonthlyCharges    0.059769
+                TechSupport_No    0.057610
+               AvgMonthlySpend    0.055436
+             OnlineSecurity_No    0.052471
+   InternetService_Fiber optic    0.052023
+      TenureGroup_New Customer    0.040550
+PaymentMethod_Electronic check    0.037705
+  CustomerLifetimeCategory_New    0.030891
+             Contract_Two year    0.021554
+           InternetService_DSL    0.019426
+CustomerLifetimeCategory_Loyal    0.015769
+             Contract_One year    0.012286
+                   NumServices    0.012243
+  TenureGroup_Premium Customer    0.012218
+              PaperlessBilling    0.010931
+           PremiumCustomerFlag    0.010742
+
+======================================================================
+STEP 11: MODEL SAVING
+======================================================================
+2026-07-13 06:56:40 | INFO     | __main__ | Saved best model (Logistic Regression) to models/best_model.pkl
+
+Demo prediction on a sample customer: Predicted Churn = No (probability=0.041)
+
+Pipeline complete. All models and reports saved.

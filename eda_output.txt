@@ -1,0 +1,109 @@
+2026-07-13 06:41:41 | INFO     | src.preprocessing | Loaded dataset with shape (7043, 21)
+2026-07-13 06:41:41 | INFO     | src.preprocessing | Converted TotalCharges to numeric (errors coerced to NaN).
+2026-07-13 06:41:41 | INFO     | src.preprocessing | Filled 11 missing TotalCharges values with 0 (tenure=0 customers).
+2026-07-13 06:41:41 | INFO     | src.preprocessing | Removed 0 duplicate rows.
+2026-07-13 06:41:41 | INFO     | src.preprocessing | Cleaning complete. Final shape: (7043, 20)
+======================================================================
+STEP 1: DATA LOADING SUMMARY
+======================================================================
+Shape: (7043, 20)
+Columns: ['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges', 'Churn']
+
+First 10 rows:
+    gender  SeniorCitizen Partner  ... MonthlyCharges  TotalCharges Churn
+0  Female              0     Yes  ...          29.85         29.85    No
+1    Male              0      No  ...          56.95       1889.50    No
+2    Male              0      No  ...          53.85        108.15   Yes
+3    Male              0      No  ...          42.30       1840.75    No
+4  Female              0      No  ...          70.70        151.65   Yes
+5  Female              0      No  ...          99.65        820.50   Yes
+6    Male              0      No  ...          89.10       1949.40    No
+7  Female              0      No  ...          29.75        301.90    No
+8  Female              0     Yes  ...         104.80       3046.05   Yes
+9    Male              0      No  ...          56.15       3487.95    No
+
+[10 rows x 20 columns]
+
+Info:
+<class 'pandas.DataFrame'>
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 20 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   gender            7043 non-null   str    
+ 1   SeniorCitizen     7043 non-null   int64  
+ 2   Partner           7043 non-null   str    
+ 3   Dependents        7043 non-null   str    
+ 4   tenure            7043 non-null   int64  
+ 5   PhoneService      7043 non-null   str    
+ 6   MultipleLines     7043 non-null   str    
+ 7   InternetService   7043 non-null   str    
+ 8   OnlineSecurity    7043 non-null   str    
+ 9   OnlineBackup      7043 non-null   str    
+ 10  DeviceProtection  7043 non-null   str    
+ 11  TechSupport       7043 non-null   str    
+ 12  StreamingTV       7043 non-null   str    
+ 13  StreamingMovies   7043 non-null   str    
+ 14  Contract          7043 non-null   str    
+ 15  PaperlessBilling  7043 non-null   str    
+ 16  PaymentMethod     7043 non-null   str    
+ 17  MonthlyCharges    7043 non-null   float64
+ 18  TotalCharges      7043 non-null   float64
+ 19  Churn             7043 non-null   str    
+dtypes: float64(2), int64(2), str(16)
+memory usage: 1.1 MB
+
+Summary statistics:
+                    count unique               top  ...      50%     75%     max
+gender              7043      2              Male  ...      NaN     NaN     NaN
+SeniorCitizen     7043.0    NaN               NaN  ...      0.0     0.0     1.0
+Partner             7043      2                No  ...      NaN     NaN     NaN
+Dependents          7043      2                No  ...      NaN     NaN     NaN
+tenure            7043.0    NaN               NaN  ...     29.0    55.0    72.0
+PhoneService        7043      2               Yes  ...      NaN     NaN     NaN
+MultipleLines       7043      3                No  ...      NaN     NaN     NaN
+InternetService     7043      3       Fiber optic  ...      NaN     NaN     NaN
+OnlineSecurity      7043      3                No  ...      NaN     NaN     NaN
+OnlineBackup        7043      3                No  ...      NaN     NaN     NaN
+DeviceProtection    7043      3                No  ...      NaN     NaN     NaN
+TechSupport         7043      3                No  ...      NaN     NaN     NaN
+StreamingTV         7043      3                No  ...      NaN     NaN     NaN
+StreamingMovies     7043      3                No  ...      NaN     NaN     NaN
+Contract            7043      3    Month-to-month  ...      NaN     NaN     NaN
+PaperlessBilling    7043      2               Yes  ...      NaN     NaN     NaN
+PaymentMethod       7043      4  Electronic check  ...      NaN     NaN     NaN
+MonthlyCharges    7043.0    NaN               NaN  ...    70.35   89.85  118.75
+TotalCharges      7043.0    NaN               NaN  ...  1394.55  3786.6  8684.8
+Churn               7043      2                No  ...      NaN     NaN     NaN
+
+[20 rows x 11 columns]
+
+======================================================================
+STEP 2: DATA CLEANING SUMMARY
+======================================================================
+Duplicates removed: 0
+Missing values filled: 11
+Remaining missing values:
+Series([], dtype: int64)
+
+======================================================================
+STEP 3: EXPLORATORY DATA ANALYSIS
+======================================================================
+INSIGHT: Overall churn rate is 26.5%. The dataset is moderately imbalanced, so accuracy alone is a misleading metric -- precision/recall/ROC AUC matter more.
+INSIGHT: Churn rate is nearly identical across genders, meaning gender is unlikely to be a strong predictor of churn on its own.
+INSIGHT: Month-to-month customers churn at 42.7%, far higher than one/two-year contract holders. Contract length is one of the strongest churn drivers.
+INSIGHT: Fiber optic customers churn at 41.9%, notably higher than DSL customers -- possibly due to higher pricing or service reliability issues.
+INSIGHT: Electronic check users churn at 45.3%, the highest of all payment methods, while automatic payment methods show much lower churn.
+INSIGHT: Churned customers cluster at higher monthly charges (~$70-100), suggesting price sensitivity is a meaningful churn driver.
+INSIGHT: Churn is heavily concentrated among customers with low tenure (<12 months), while long-tenured customers rarely churn -- loyalty compounds.
+INSIGHT: Tenure is negatively correlated with churn while MonthlyCharges is positively correlated -- customers who pay more and stay less are the highest risk.
+INSIGHT: The pairplot confirms churned customers (orange) skew toward low tenure and high monthly charges, with total charges naturally following tenure.
+INSIGHT: Senior citizens churn at 41.7%, higher than non-seniors, and customers without partners/dependents churn more -- suggesting single households are more price-sensitive and less 'locked in'.
+
+Outlier detection (IQR method):
+  tenure: 0 outliers detected (bounds: [-60.0, 124.0])
+  MonthlyCharges: 0 outliers detected (bounds: [-46.0, 171.4])
+  TotalCharges: 0 outliers detected (bounds: [-4683.5, 8868.7])
+INSIGHT: None of the numeric features show extreme outliers requiring removal -- the boxplots show tight, business-plausible ranges (e.g., charges never negative or absurdly high), so no rows were dropped for outliers.
+
+EDA complete. All plots saved to outputs/plots/

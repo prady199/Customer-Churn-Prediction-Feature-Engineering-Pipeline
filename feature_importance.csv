@@ -1,0 +1,21 @@
+Feature,Importance
+Contract_Month-to-month,0.09860932307048334
+tenure,0.09112386140102813
+TotalCharges,0.06678908430837541
+TotalCharges_log,0.06628403825135047
+MonthlyCharges,0.059769023555322244
+TechSupport_No,0.057610163181890994
+AvgMonthlySpend,0.055436250282224576
+OnlineSecurity_No,0.05247065314999225
+InternetService_Fiber optic,0.05202331927128985
+TenureGroup_New Customer,0.040549790316009644
+PaymentMethod_Electronic check,0.03770459253121176
+CustomerLifetimeCategory_New,0.03089139317312099
+Contract_Two year,0.02155446625503541
+InternetService_DSL,0.019426093484974736
+CustomerLifetimeCategory_Loyal,0.015769252126647527
+Contract_One year,0.01228599340104344
+NumServices,0.012242769488427627
+TenureGroup_Premium Customer,0.01221837405160957
+PaperlessBilling,0.010931363578635455
+PremiumCustomerFlag,0.010742489299954439
